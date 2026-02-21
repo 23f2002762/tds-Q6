@@ -9,5 +9,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: 23f2002762@ds.study.iitm.ac.in
         run: echo "Hello, world!"
+
+      - name: Cache dependencies
+        id: cache-deps
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/deps
+          key: cache-2e5bb2d
+
+      - name: prime-cache-2e5bb2d
+        run: |
+          if [ "${{ steps.cache-deps.outputs.cache-hit }}" == "true" ]; then
+            echo "Cache hit"
+          else
+            echo "Cache miss"
+            mkdir -p ~/.cache/deps
+            echo "primed" > ~/.cache/deps/marker
+          fi
